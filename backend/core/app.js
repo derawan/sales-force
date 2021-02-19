@@ -103,6 +103,12 @@ export default class App {
         }));
     }
 
+
+    InisialisasiDatabaseUtama()
+    {
+        let connection = Connector.CreateConnection2(this.applicationDBConfig);
+    }
+
     // inisialisasi middleware
     InisialisasiServer() {
 
@@ -128,6 +134,9 @@ export default class App {
 
         // enable this if you want to enable session
         this.InisialisasiSession(app);
+
+        // inisialisasi connection database utama
+        this.InisialisasiDatabaseUtama();
 
     }    
 
