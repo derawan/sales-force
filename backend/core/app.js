@@ -9,13 +9,14 @@ import Cookie from 'cookie-parser';
 import expressEjsLayouts from 'express-ejs-layouts';
 //https://www.npmjs.com/package/express-session
 import Session from 'express-session';
-//import Cors from 'cors';
+import Cors from 'cors';
 
 
 //import jwt from 'jsonwebtoken';
 
+
 // import Mongoose from 'mongoose';
-// import ConnectMongo from 'connect-mongo';
+import ConnectMongo from 'connect-mongo';
 
 
 import * as Route from './../routes/index';
@@ -29,6 +30,7 @@ import * as Route from './../routes/index';
 // import users from './../models/users';
 
 import * as Utilities from './utilities/utils';
+import * as Connector from './utilities/connector';
 
 
 
@@ -84,20 +86,19 @@ export default class App {
         this.session_secret = Utilities.GetConfig("APP_SESSION_SECRET", 'my-secret-key');
 
         // buat storagenya
-        // let mongoStore = ConnectMongo(Session);
-        // let connection = Mongoose.createConnection(
-        //     this.applicationDBConfig, 
-        //     {useNewUrlParser:true, useUnifiedTopology:true, useCreateIndex:true}
-        // );
 
-        // let sessionStore = new mongoStore({
-        //     mongooseConnection : connection,
-        //     collection:'sessions'
-        // });
+        let mongoStore = ConnectMongo(Session);
+        let connection = Connector.CreateConnection1(this.applicationDBConfig);
+
+        let sessionStore = new mongoStore({
+            mongooseConnection : connection,
+            collection:'sessions'
+        });
+
         app.use(Session({
             secret: this.session_secret,
             resave: false,
-            //store:sessionStore,
+            store:sessionStore,
             saveUninitialized: false
         }));
     }
@@ -120,7 +121,7 @@ export default class App {
         app.use(Express.urlencoded({ extended: true }));
 
         // enable Cross Origin (CORS)
-        //app.use(Cors());
+        app.use(Cors());
 
         // enable this if you want to enable cookie
         app.use(Cookie());
