@@ -1,11 +1,44 @@
 import Express from 'express';
+import * as ModelUser from  './../models/Schema/user_schema';
 
 const defaultRouter = Express.Router();
 
-defaultRouter.route("/").get(async (req, res) => { res.json({success:true,message:"daftar user"})});
-defaultRouter.route("/reg").get(async (req, res) => { res.json({success:true,message:"registrasi user"})});
-defaultRouter.route("/hapus").get(async (req, res) => { res.json({success:true,message:"hapus user"})});
-defaultRouter.route("/hello").get(async (req, res) => { res.json({success:true,message:"hello"})});
+defaultRouter.route("/").get(
+    async (req, res, next) => { 
+        try 
+        {
+            throw 'ini belum digarap module :#Module Tampilkan Daftar User';
+            res.send('testing');
+        }
+        catch(error)
+        {
+            next(error);
+        }
+    }
+);
+
+defaultRouter.route("/reg").post(
+    async (req, res, next) => { 
+        try 
+        {
+            let dataUserBaru = {...req.body, status:'new_registration'};
+            console.log(dataUserBaru);
+            //throw 'ini belum digarap module :#Module Pendaftaran User Baru';
+            let hasil = await ModelUser.userModel.create(dataUserBaru);
+            res.json(
+                {success : true, payload: hasil}
+            );
+        }
+        catch(error)
+        {
+            next(error);
+        }
+    }
+);
+
+
+// defaultRouter.route("/hapus").get(async (req, res) => { res.json({success:true,message:"hapus user"})});
+// defaultRouter.route("/hello").get(async (req, res) => { res.json({success:true,message:"hello"})});
 
 const rt = {
     group:'/users',
