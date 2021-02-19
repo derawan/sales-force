@@ -75,3 +75,6 @@
 ::1 - - [19/Feb/2021:14:43:08 +0000] "POST /users/reg HTTP/1.1" 200 108 "-" "PostmanRuntime/7.26.8"
 ::1 - - [19/Feb/2021:14:44:00 +0000] "POST /users/reg HTTP/1.1" 200 136 "-" "PostmanRuntime/7.26.8"
 ::1 - - [19/Feb/2021:14:45:00 +0000] "POST /users/reg HTTP/1.1" 200 136 "-" "PostmanRuntime/7.26.8"
+::1 - - [19/Feb/2021:14:46:24 +0000] "POST /users/reg HTTP/1.1" 200 282 "-" "PostmanRuntime/7.26.8"
+::1 - - [19/Feb/2021:14:50:43 +0000] "POST /users/reg HTTP/1.1" 200 281 "-" "PostmanRuntime/7.26.8"
+::1 - - [19/Feb/2021:14:52:33 +0000] "GET /users/ HTTP/1.1" 500 81 "-" "PostmanRuntime/7.26.8"

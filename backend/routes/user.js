@@ -7,8 +7,12 @@ defaultRouter.route("/").get(
     async (req, res, next) => { 
         try 
         {
-            throw 'ini belum digarap module :#Module Tampilkan Daftar User';
-            res.send('testing');
+            let hasil = await ModelUser.userModel.find().exec();
+            //throw 'ini belum digarap module :#Module Tampilkan Daftar User';
+            res.json({
+                success:true,
+                payload: hasil
+            });
         }
         catch(error)
         {
@@ -22,7 +26,6 @@ defaultRouter.route("/reg").post(
         try 
         {
             let dataUserBaru = {...req.body, status:'new_registration'};
-            console.log(dataUserBaru);
             //throw 'ini belum digarap module :#Module Pendaftaran User Baru';
             let hasil = await ModelUser.userModel.create(dataUserBaru);
             res.json(
