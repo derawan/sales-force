@@ -21,6 +21,41 @@ defaultRouter.route("/hello").get(async (req, res) => {
 });
 
 
+defaultRouter.route("/approval").post(async (req, res) => { 
+    // masukkan attendanceid
+    let attendance_id = req.body.attendance_id;
+
+    // validasi
+    if (attendance_id===undefined) {
+        return res.status(403).json({success:false, message:'data attendance tidak ditemukan'})
+    }
+
+    //console.log();
+    try {
+        let dataAttendance = await attendances.attendanceModel.findById(mongoose.Types.ObjectId(attendance_id)).exec();
+        if (!dataAttendance) {
+            return res.status(403).json({success:false, message:'data attendance tidak ditemukan'})    
+        }
+
+        // dataAttendance ditemukan
+        if (dataAttendance.IsApproved) {
+            return res.status(403).json({success:false, message:'data attendance sudah pernah disetujui'});
+        }
+        else {
+            dataAttendance.IsApproved = true;
+            dataAttendance.save();
+            return res.status(200).json({success:true, message:'data attendance sudah berhasil disetujui'})    
+        }
+    }
+    catch (error) {
+        return res.status(403).json({success:false, message:'data attendance tidak ditemukan'})
+    }
+    
+
+
+});
+
+
 defaultRouter.route("/logout").post(async (req, res) => { 
     // masukkan attendanceid
     let attendance_id = req.body.attendance_id;
@@ -50,7 +85,7 @@ defaultRouter.route("/logout").post(async (req, res) => {
     }
     
 
-    res.send(attendance_id);
+    
 
 });
 
