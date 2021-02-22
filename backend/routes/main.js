@@ -2,6 +2,7 @@ import Express from 'express';
 import * as Utilities from './../core/utilities/utils'
 import * as user from './../models/Schema/user_schema';
 import * as attendances from './../models/Schema/attendance_schema';
+import mongoose from 'mongoose';
 
 const defaultRouter = Express.Router();
 
@@ -19,6 +20,39 @@ defaultRouter.route("/hello").get(async (req, res) => {
     res.render(Utilities.GetView('hello')); 
 });
 
+
+defaultRouter.route("/logout").post(async (req, res) => { 
+    // masukkan attendanceid
+    let attendance_id = req.body.attendance_id;
+
+    // validasi
+    if (attendance_id===undefined) {
+        return res.status(403).json({success:false, message:'data attendance tidak ditemukan'})
+    }
+
+    //console.log();
+    try {
+        let dataAttendance = await attendances.attendanceModel.findById(mongoose.Types.ObjectId(attendance_id)).exec();
+        if (!dataAttendance) {
+            return res.status(403).json({success:false, message:'data attendance tidak ditemukan'})    
+        }
+        if (dataAttendance.IsApproved) {
+            dataAttendance.AbsenOut = Date.now();
+            dataAttendance.save();
+            return res.status(200).json({success:true, message:'anda berhasil logout'});
+        }
+        else {
+            return res.status(403).json({success:false, message:'silahkan kontak supervisor anda, untuk mengapprove absen pulang'})    
+        }
+    }
+    catch (error) {
+        return res.status(403).json({success:false, message:'data attendance tidak ditemukan'})
+    }
+    
+
+    res.send(attendance_id);
+
+});
 
 defaultRouter.route("/login").post(async (req, res) => { 
     // masukkan username, password
