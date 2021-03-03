@@ -50,9 +50,6 @@ defaultRouter.route("/approval").post(async (req, res) => {
     catch (error) {
         return res.status(403).json({success:false, message:'data attendance tidak ditemukan'})
     }
-    
-
-
 });
 
 
